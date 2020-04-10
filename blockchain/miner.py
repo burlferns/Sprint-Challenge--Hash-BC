@@ -1,5 +1,6 @@
 import hashlib
 import requests
+import random
 
 import sys
 
@@ -25,6 +26,22 @@ def proof_of_work(last_proof):
     print("Searching for next proof")
     proof = 0
     #  TODO: Your code here
+    # find the last five digits of the hash of the previous proof
+    # print(f"This is the last_proof: {last_proof}") # its an integer
+    # print(f"This is the type of last_proof: {type(last_proof)}") # its a float
+    hex_hash = hashlib.sha256(f'{last_proof}'.encode()).hexdigest()
+    # print(f"This is the hex_hash of last_proof: {hex_hash}")
+    # print(f"This is the type of hex_hash: {type(hex_hash)}") # its a string
+    hh_last5 = hex_hash[-5:]
+    # print(f"This is the hh_last5 of last_proof: {hh_last5}")
+
+    proof = random.random()
+    while not valid_proof(hh_last5,proof):
+        proof = random.random()
+
+    # proof_hash = hashlib.sha256(f'{proof}'.encode()).hexdigest()
+    # print(f'proof_hash={proof_hash}')
+    # print(f'previ_hash={hex_hash}')
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -40,7 +57,12 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    pass
+    # hh =  hashlib.sha256(f'{proof}'.encode()).hexdigest()
+    # print(f"This is the hh of proof: {hh}")
+    hh_first5 = (hashlib.sha256(f'{proof}'.encode()).hexdigest())[0:5]
+    # print(f"This is the hh_first5 of proof: {hh_first5}")
+    return hh_first5 == last_hash
+    
 
 
 if __name__ == '__main__':
