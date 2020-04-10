@@ -12,6 +12,16 @@ def get_indices_of_item_weights(weights, length, limit):
     """
     YOUR CODE HERE
     """
+    for index, weight in enumerate(weights):
+        diff = limit - weight
+        diffIndex = hash_table_retrieve(ht, diff)
+        if diffIndex != None:
+            if diffIndex > index:
+                return [diffIndex,index]
+            else:
+                return [index,diffIndex]
+        else:
+            hash_table_insert(ht, weight, index)
 
     return None
 
